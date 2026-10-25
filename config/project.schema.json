@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Movie Studio Project",
+  "type": "object",
+  "required": ["project", "characters", "locations", "shots"],
+  "additionalProperties": false,
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["id", "title", "format", "resolution", "fps", "language", "target_duration_sec"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "title": { "type": "string" },
+        "format": { "type": "string", "enum": ["16:9", "9:16", "1:1", "2.39:1"] },
+        "resolution": { "type": "string", "pattern": "^[0-9]+x[0-9]+$" },
+        "fps": { "type": "integer", "minimum": 12, "maximum": 60 },
+        "language": { "type": "string", "enum": ["vi", "en", "ja", "ko", "zh", "other"] },
+        "target_duration_sec": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "look": { "type": "string" },
+        "lens": { "type": "string" },
+        "palette": { "type": "array", "items": { "type": "string" } },
+        "grade_lut": { "type": "string" }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "bible", "refs"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "name": { "type": "string" },
+          "bible": { "type": "string" },
+          "refs": { "type": "array", "items": { "type": "string" } },
+          "lora": { "type": ["string", "null"] },
+          "token": { "type": "string" }
+        }
+      }
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "brief"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "name": { "type": "string" },
+          "brief": { "type": "string" },
+          "plates": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "shots": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/shot" }
+    }
+  },
+  "definitions": {
+    "shot": {
+      "type": "object",
+      "required": ["shot_id", "scene", "description", "characters", "location", "camera", "duration_sec", "render"],
+      "additionalProperties": false,
+      "properties": {
+        "shot_id": { "type": "string", "pattern": "^S[0-9]{2}_SH[0-9]{3}$" },
+        "scene": { "type": "integer", "minimum": 1 },
+        "description": { "type": "string", "minLength": 3 },
+        "characters": { "type": "array", "items": { "type": "string" } },
+        "location": { "type": "string" },
+        "props": { "type": "array", "items": { "type": "string" } },
+        "camera": { "type": "string" },
+        "duration_sec": { "type": "number", "exclusiveMinimum": 0, "maximum": 15 },
+        "dialogue": { "type": ["string", "null"] },
+        "motion_prompt": { "type": "string" },
+        "keyframes": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "first": { "type": ["string", "null"] },
+            "mid": { "type": ["string", "null"] },
+            "last": { "type": ["string", "null"] }
+          }
+        },
+        "render": {
+          "type": "object",
+          "required": ["model", "seed", "version", "status"],
+          "additionalProperties": false,
+          "properties": {
+            "model": { "type": "string" },
+            "seed": { "type": "integer", "minimum": 0 },
+            "version": { "type": "integer", "minimum": 1 },
+            "status": {
+              "type": "string",
+              "enum": ["planned", "boarded", "board_approved", "rendering", "rendered", "approved", "audio_done", "post_done", "final", "blocked"]
+            }
+          }
+        },
+        "audio": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "voice_file": { "type": ["string", "null"] },
+            "sfx": { "type": "array", "items": { "type": "string" } },
+            "lip_sync": { "type": "boolean" }
+          }
+        },
+        "qc": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "identity": { "type": ["boolean", "null"] },
+            "motion": { "type": ["boolean", "null"] },
+            "color": { "type": ["boolean", "null"] },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

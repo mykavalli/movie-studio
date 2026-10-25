@@ -1,0 +1,146 @@
+{
+  "project": {
+    "id": "phim-01",
+    "title": "Ánh Đèn Cuối Phố",
+    "format": "16:9",
+    "resolution": "1920x1080",
+    "fps": 24,
+    "language": "vi",
+    "target_duration_sec": 180
+  },
+  "style": {
+    "look": "cinematic, muted teal-orange, film grain",
+    "lens": "35mm anamorphic, shallow depth of field",
+    "palette": ["#0e1a1f", "#1f3a3d", "#c98b4b", "#e8d5b7"],
+    "grade_lut": "01_assets/luts/teal-orange.cube"
+  },
+  "characters": [
+    {
+      "id": "linh",
+      "name": "Linh",
+      "bible": "01_assets/characters/linh/bible.md",
+      "refs": [
+        "01_assets/characters/linh/refs/front.png",
+        "01_assets/characters/linh/refs/three-quarter.png",
+        "01_assets/characters/linh/refs/profile.png"
+      ],
+      "lora": "01_assets/characters/linh/lora/linh_v1.safetensors",
+      "token": "linh, 27yo vietnamese woman, shoulder-length black hair, mole under left eye"
+    }
+  ],
+  "locations": [
+    {
+      "id": "quan_dem",
+      "name": "Quán đêm",
+      "brief": "01_assets/locations/quan_dem/brief.md",
+      "plates": [
+        "01_assets/locations/quan_dem/plates/wide.png",
+        "01_assets/locations/quan_dem/plates/medium.png"
+      ]
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "S01_SH001",
+      "scene": 1,
+      "description": "Toàn cảnh con phố đêm, mưa nhẹ, đèn neon phản chiếu trên mặt đường",
+      "characters": [],
+      "location": "duong_pho",
+      "props": [],
+      "camera": "wide establishing shot, static, slight handheld",
+      "duration_sec": 4.0,
+      "dialogue": null,
+      "motion_prompt": "Light rain falls, neon reflections shimmer on wet asphalt, a distant motorbike passes",
+      "keyframes": {
+        "first": "02_boards/S01_SH001/first.png",
+        "mid": null,
+        "last": null
+      },
+      "render": {
+        "model": "ltx23_i2v",
+        "seed": 120034,
+        "version": 1,
+        "status": "boarded"
+      },
+      "audio": {
+        "voice_file": null,
+        "sfx": ["04_audio/sfx/rain_light.wav", "04_audio/sfx/street_ambience.wav"],
+        "lip_sync": false
+      },
+      "qc": {
+        "identity": null,
+        "motion": null,
+        "color": null,
+        "notes": ""
+      }
+    },
+    {
+      "shot_id": "S01_SH002",
+      "scene": 1,
+      "description": "Linh bước vào quán, ánh mắt dáo dác tìm người",
+      "characters": ["linh"],
+      "location": "quan_dem",
+      "props": ["den_long"],
+      "camera": "medium shot, slow dolly in",
+      "duration_sec": 4.5,
+      "dialogue": "Không có ai ở đây...",
+      "motion_prompt": "She walks in slowly, eyes scanning the room, dust particles in the light beam, hair moves slightly",
+      "keyframes": {
+        "first": "02_boards/S01_SH002/first.png",
+        "mid": "02_boards/S01_SH002/mid.png",
+        "last": "02_boards/S01_SH002/last.png"
+      },
+      "render": {
+        "model": "wan22_i2v_q5",
+        "seed": 884213,
+        "version": 2,
+        "status": "approved"
+      },
+      "audio": {
+        "voice_file": "04_audio/voice/S01_SH002_linh_01.wav",
+        "sfx": ["04_audio/sfx/footsteps_wood.wav"],
+        "lip_sync": true
+      },
+      "qc": {
+        "identity": true,
+        "motion": true,
+        "color": true,
+        "notes": "Giữ tốt, frame cuối dùng nối SH003"
+      }
+    },
+    {
+      "shot_id": "S01_SH003",
+      "scene": 1,
+      "description": "Cận mặt Linh khi nhận ra người quen ở góc quán",
+      "characters": ["linh"],
+      "location": "quan_dem",
+      "props": [],
+      "camera": "close-up, static, 85mm",
+      "duration_sec": 3.0,
+      "dialogue": "Anh...?",
+      "motion_prompt": "Her eyes widen slightly, lips part, she takes a small breath",
+      "keyframes": {
+        "first": "02_boards/S01_SH003/first.png",
+        "mid": null,
+        "last": "02_boards/S01_SH003/last.png"
+      },
+      "render": {
+        "model": "ltx23_i2v",
+        "seed": 551902,
+        "version": 1,
+        "status": "planned"
+      },
+      "audio": {
+        "voice_file": null,
+        "sfx": [],
+        "lip_sync": true
+      },
+      "qc": {
+        "identity": null,
+        "motion": null,
+        "color": null,
+        "notes": ""
+      }
+    }
+  ]
+}

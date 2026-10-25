@@ -1,0 +1,201 @@
+# Model manifest — Movie Studio
+# Dùng bởi scripts/02-download-models.sh
+# tier: core | full | optional
+# size_gb là ước tính để kiểm tra disk trước khi tải.
+
+version: 1
+updated: "2026-10-25"
+
+tiers:
+  core:
+    description: "Tối thiểu để chạy 1 shot end-to-end trên 32GB VRAM / 80GB disk"
+    estimated_gb: 58
+  full:
+    description: "Thêm LTX 2.3, audio, upscale — cần volume >= 200GB"
+    estimated_gb: 95
+  optional:
+    description: "Model nặng, chỉ dùng khi có GPU >= 48GB"
+    estimated_gb: 80
+
+models:
+  # ---------- STATION 2: IMAGE / MULTI-IMAGE COMPOSITE ----------
+  - id: qwen_edit_2511_gguf
+    station: 2
+    tier: core
+    repo: QuantStack/Qwen-Image-Edit-2511-GGUF
+    file: "*Q6_K.gguf"
+    dest: models/unet
+    size_gb: 17
+    license: Apache-2.0
+    note: "Nếu repo 2511 chưa có, dùng QuantStack/Qwen-Image-Edit-2509-GGUF"
+
+  - id: qwen_25_vl_7b
+    station: 2
+    tier: core
+    repo: Comfy-Org/HunyuanVideo_1.5_repackaged
+    file: "split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors"
+    dest: models/text_encoders
+    size_gb: 8
+    license: Apache-2.0
+
+  - id: qwen_image_vae
+    station: 2
+    tier: core
+    repo: Comfy-Org/Qwen-Image_ComfyUI
+    file: "split_files/vae/qwen_image_vae.safetensors"
+    dest: models/vae
+    size_gb: 0.3
+    license: Apache-2.0
+
+  - id: qwen_edit_lightning
+    station: 2
+    tier: core
+    repo: lightx2v/Qwen-Image-Edit-2511-Lightning
+    file: "*4steps*bf16.safetensors"
+    dest: models/loras
+    size_gb: 0.9
+    license: Apache-2.0
+    note: "LoRA 4-step, giảm thời gian render"
+
+  # ---------- STATION 3: VIDEO ----------
+  - id: wan22_i2v_high
+    station: 3
+    tier: core
+    repo: QuantStack/Wan2.2-I2V-A14B-GGUF
+    file: "*high-noise*Q5_K_M.gguf"
+    dest: models/unet
+    size_gb: 10
+    license: Apache-2.0
+
+  - id: wan22_i2v_low
+    station: 3
+    tier: core
+    repo: QuantStack/Wan2.2-I2V-A14B-GGUF
+    file: "*low-noise*Q5_K_M.gguf"
+    dest: models/unet
+    size_gb: 10
+    license: Apache-2.0
+
+  - id: umt5_xxl
+    station: 3
+    tier: core
+    repo: Comfy-Org/Wan_2.2_ComfyUI_Repackaged
+    file: "split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    dest: models/text_encoders
+    size_gb: 5
+    license: Apache-2.0
+
+  - id: wan_vae
+    station: 3
+    tier: core
+    repo: Comfy-Org/Wan_2.2_ComfyUI_Repackaged
+    file: "split_files/vae/wan_2.1_vae.safetensors"
+    dest: models/vae
+    size_gb: 0.3
+    license: Apache-2.0
+
+  - id: wan22_lightning_high
+    station: 3
+    tier: core
+    repo: lightx2v/Wan2.2-Lightning
+    file: "*high_noise*4steps*.safetensors"
+    dest: models/loras
+    size_gb: 0.8
+    license: Apache-2.0
+
+  - id: wan22_lightning_low
+    station: 3
+    tier: core
+    repo: lightx2v/Wan2.2-Lightning
+    file: "*low_noise*4steps*.safetensors"
+    dest: models/loras
+    size_gb: 0.8
+    license: Apache-2.0
+
+  # ---------- STATION 5: POST ----------
+  - id: seedvr2
+    station: 5
+    tier: core
+    repo: numz/SeedVR2_comfyUI
+    file: "*seedvr2*3b*.safetensors"
+    dest: models/upscale_models
+    size_gb: 3
+    license: Apache-2.0
+    note: "Chọn bản 3B cho 32GB; 7B nếu có 48GB+"
+
+  # ---------- STATION 4: AUDIO ----------
+  - id: index_tts_2
+    station: 4
+    tier: full
+    repo: IndexTeam/IndexTTS-2
+    file: "*"
+    dest: models/audio_encoders/index-tts-2
+    size_gb: 2
+    license: "kiểm tra model card"
+
+  # ---------- STATION 3: LTX (optional fast/audio) ----------
+  - id: ltx23_gguf
+    station: 3
+    tier: full
+    repo: unsloth/LTX-2.3-GGUF
+    file: "*Q4_K_S.gguf"
+    dest: models/unet
+    size_gb: 12
+    license: "LTX-2 Community License"
+
+  - id: ltx23_gemma
+    station: 3
+    tier: full
+    repo: Lightricks/LTX-2.3
+    file: "*gemma_3_12B_it_fp8_scaled*"
+    dest: models/text_encoders
+    size_gb: 12
+    license: "LTX-2 Community License"
+
+  - id: ltx23_video_vae
+    station: 3
+    tier: full
+    repo: Lightricks/LTX-2.3
+    file: "*video*vae*bf16*"
+    dest: models/vae
+    size_gb: 3
+    license: "LTX-2 Community License"
+
+  - id: ltx23_audio_vae
+    station: 3
+    tier: full
+    repo: Lightricks/LTX-2.3
+    file: "*audio*vae*bf16*"
+    dest: models/vae
+    size_gb: 2
+    license: "LTX-2 Community License"
+
+  - id: ltx23_upscaler
+    station: 3
+    tier: full
+    repo: Lightricks/LTX-2.3
+    file: "*spatial*upscaler*x2*"
+    dest: models/latent_upscale_models
+    size_gb: 1
+    license: "LTX-2 Community License"
+
+  # ---------- OPTIONAL: HEAVY ----------
+  - id: minimax_h3
+    station: 3
+    tier: optional
+    repo: Comfy-Org/MiniMax-H3
+    file: "*"
+    dest: models/minimax-h3
+    size_gb: 36
+    license: "MiniMax H3 Community License"
+    note: "Cần GPU >= 48GB; không chạy được trên 32GB"
+
+  - id: wan22_animate
+    station: 3
+    tier: optional
+    repo: Wan-AI/Wan2.2-Animate-14B
+    file: "*"
+    dest: models/diffusion_models
+    size_gb: 20
+    license: Apache-2.0
+    note: "Transfer diễn xuất từ video reference"

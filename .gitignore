@@ -1,0 +1,38 @@
+# Dữ liệu lớn — không commit
+models/
+output/
+sync/
+renders/
+*.safetensors
+*.gguf
+*.ckpt
+*.pt
+*.pth
+*.mp4
+*.mov
+*.wav
+*.flac
+
+# Thông tin riêng (IP, token, audit thật)
+local/
+
+# Bí mật
+.env
+.env.*
+secrets/
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+vast_api_key
+
+# Hệ điều hành
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+__pycache__/
+*.pyc

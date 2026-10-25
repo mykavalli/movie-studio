@@ -1,0 +1,6 @@
+shot_id,scene,description,characters,location,props,camera,duration_sec,dialogue,motion_prompt,model,status
+S01_SH001,1,"Toàn cảnh phố đêm mưa, đèn neon phản chiếu",,duong_pho,,"wide establishing, static, handheld nhẹ",4,,Light rain falls, neon reflections shimmer on wet asphalt, a motorbike passes,ltx23_i2v,planned
+S01_SH002,1,"Linh bước vào quán, mắt dáo dác tìm người",linh,quan_dem,den_long,"medium, slow dolly in",4.5,"Không có ai ở đây...","She walks in slowly, eyes scanning the room, dust in the light beam",wan22_i2v_q5,planned
+S01_SH003,1,"Cận mặt Linh khi nhận ra người quen",linh,quan_dem,,"close-up, static, 85mm",3,"Anh...?","Her eyes widen slightly, lips part, small breath",ltx23_i2v,planned
+S01_SH004,1,"Huy ngồi ở góc quán, khuất sau làn khói",huy,quan_dem,thuoc,"medium, profile, static",3.5,,"He exhales smoke slowly, eyes fixed on the door",wan22_i2v_q5,planned
+S01_SH005,1,"Hai người nhìn nhau qua căn phòng",linh;huy,quan_dem,,"wide, symmetrical, slow push in",5,,"They hold eye contact, background patrons blurred",wan22fmlf,planned
