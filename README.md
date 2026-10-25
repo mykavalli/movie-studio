@@ -3,6 +3,8 @@
 > Xưởng làm phim AI hoàn chỉnh: **6 trạm sản xuất + 1 cơ sở dữ liệu shot + 1 quy trình duyệt**.
 > Mục tiêu: phim ngắn 2–5 phút, 30–60 shot, 1–3 nhân vật, làm lại được nhiều lần.
 
+**Repo:** https://github.com/mykavalli/movie-studio
+
 ---
 
 ## Trạng thái
