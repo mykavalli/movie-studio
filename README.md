@@ -11,15 +11,15 @@
 
 | Hạng mục | Trạng thái |
 |---|---|
-| GPU | Tier 2 — 32GB VRAM (xem `docs/07-CHI-PHI.md`) |
+| GPU | Tier 1 — 24GB VRAM (xem `docs/07-CHI-PHI.md`) |
 | SSH | ✅ Đã kết nối (thông tin thật lưu ở `local/`, không commit) |
 | ComfyUI | ✅ 0.27.0 |
 | PyTorch | ✅ 2.10.0 + CUDA 12.8 |
 | ffmpeg | ✅ 6.1.1 |
-| Model | ⛔ Chưa có (chỉ checkpoint mặc định) |
-| Disk | ⚠️ 80GB — chưa đủ cho full stack |
-| Volume | ⛔ Chưa gắn — cần chốt trước khi tải model |
-| Custom node | Chỉ có ComfyUI-Manager |
+| Model | ✅ Core: Qwen-Image-Edit 2511, Wan 2.2 I2V, SeedVR2 |
+| Disk | ✅ 599GB trống |
+| Volume | ⚠️ Không có — backup lên Google Drive |
+| Custom node | ✅ 11 node |
 
 **Việc đầu tiên cần làm:** chốt phương án disk (xem `docs/03-HA-TANG-VASTAI.md`) trước khi tải model.
 
@@ -40,6 +40,7 @@
 | [docs/08-RUI-RO.md](docs/08-RUI-RO.md) | Rủi ro và cách xử lý |
 | [docs/09-AUDIT-MAU.md](docs/09-AUDIT-MAU.md) | Mẫu audit server (không chứa thông tin thật) |
 | [docs/10-GOOGLE-DRIVE.md](docs/10-GOOGLE-DRIVE.md) | Lưu ảnh/video lên Google Drive bằng rclone |
+| [docs/11-KET-QUA-TEST.md](docs/11-KET-QUA-TEST.md) | Kết quả test thực tế trên Tier 1 24GB |
 
 **Cấu hình & mẫu:**
 

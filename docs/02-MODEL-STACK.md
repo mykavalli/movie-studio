@@ -50,7 +50,7 @@
 | `Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors` | `lightx2v/Qwen-Image-Edit-2511-Lightning` | `models/loras/` | ~0.9GB |
 
 **Thiết lập:** 4 step, CFG 1.0, 1328×1328 hoặc 1280×704.
-**Thời gian:** ~20–35s/ảnh trên Tier 2 (32GB).
+**Thời gian (đo thực tế T1 24GB):** 37s/ảnh với 4-step Lightning; 173s với 20-step dev.
 
 ### Video — Wan 2.2 I2V 14B
 
@@ -63,7 +63,7 @@
 | `wan2.2_i2v_lightx2v_4steps_lora_v1_*_noise.safetensors` | `Comfy-Org/Wan_2.2_ComfyUI_Repackaged` | `models/loras/` | ~1.5GB |
 
 **Thiết lập:** 4 step Lightning, 480p hoặc 720p, 81 frame.
-**Thời gian:** 480p ~2–4 phút; 720p ~6–10 phút.
+**Thời gian (đo thực tế T1 24GB):** 49 frame 480p ~92s; 81 frame ~2.5 phút; 720p ~5–8 phút.
 
 ### Hậu kỳ & audio tối thiểu
 

@@ -121,7 +121,8 @@ download_one() {
 
   local avail
   avail=$(avail_gb)
-  if [ "$avail" -lt "$size" ]; then
+  # size có thể là số thập phân (0.3, 0.8) → dùng awk thay vì test số nguyên
+  if awk -v a="$avail" -v s="$size" 'BEGIN { exit !(a+0 < s+0) }'; then
     echo "    [SKIP] không đủ disk: còn ${avail}GB, cần ${size}GB"
     return 1
   fi
