@@ -3,12 +3,21 @@
 # Dùng: bash scripts/02-download-models.sh --tier core [--dry-run]
 #       bash scripts/02-download-models.sh --tier core --only wan22_i2v_high
 #       bash scripts/02-download-models.sh --list
+#
+# Biến môi trường:
+#   WAN_QUANT=Q4_K_M   (T1 24GB) hoặc Q5_K_M (T2 32GB)
+#   QWEN_QUANT=Q6_K    (T1 24GB) hoặc Q8_0 (T2 32GB)
+#   LTX_QUANT=Q4_K_S
 set -euo pipefail
 
 COMFY="${COMFY:-/workspace/ComfyUI}"
 VENV="${VENV:-/venv/main}"
 export HF_HOME="${HF_HOME:-/workspace/.hf_home}"
 export HF_HUB_ENABLE_HF_TRANSFER=1
+
+WAN_QUANT="${WAN_QUANT:-Q4_K_M}"
+QWEN_QUANT="${QWEN_QUANT:-Q6_K}"
+LTX_QUANT="${LTX_QUANT:-Q4_K_S}"
 
 TIER="core"
 DRY_RUN=false
@@ -21,33 +30,41 @@ while [ $# -gt 0 ]; do
     --only) ONLY="$2"; shift 2 ;;
     --list) TIER="list"; shift ;;
     -h|--help)
-      sed -n '2,7p' "$0"; exit 0 ;;
+      sed -n '2,12p' "$0"; exit 0 ;;
     *) echo "Tham số lạ: $1"; exit 1 ;;
   esac
 done
 
 # id|tier|repo|file|dest|size_gb
 MODELS=(
-  # ---------- CORE ----------
-  "qwen_edit_2511_gguf|core|QuantStack/Qwen-Image-Edit-2511-GGUF|*Q6_K.gguf|unet|17"
-  "qwen_25_vl_7b|core|Comfy-Org/HunyuanVideo_1.5_repackaged|split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors|text_encoders|8"
+  # ---------- CORE: QWEN IMAGE EDIT ----------
+  "qwen_edit_2511_gguf|core|unsloth/Qwen-Image-Edit-2511-GGUF|qwen-image-edit-2511-${QWEN_QUANT}.gguf|unet|17"
+  "qwen_25_vl_7b|core|Comfy-Org/Qwen-Image_ComfyUI|split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors|text_encoders|8"
   "qwen_image_vae|core|Comfy-Org/Qwen-Image_ComfyUI|split_files/vae/qwen_image_vae.safetensors|vae|0.3"
-  "qwen_edit_lightning|core|lightx2v/Qwen-Image-Edit-2511-Lightning|*4steps*bf16.safetensors|loras|0.9"
-  "wan22_i2v_high|core|QuantStack/Wan2.2-I2V-A14B-GGUF|*high-noise*Q5_K_M.gguf|unet|10"
-  "wan22_i2v_low|core|QuantStack/Wan2.2-I2V-A14B-GGUF|*low-noise*Q5_K_M.gguf|unet|10"
+  "qwen_edit_lightning|core|lightx2v/Qwen-Image-Edit-2511-Lightning|Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors|loras|0.9"
+
+  # ---------- CORE: WAN 2.2 I2V ----------
+  "wan22_i2v_high|core|QuantStack/Wan2.2-I2V-A14B-GGUF|HighNoise/Wan2.2-I2V-A14B-HighNoise-${WAN_QUANT}.gguf|unet|9"
+  "wan22_i2v_low|core|QuantStack/Wan2.2-I2V-A14B-GGUF|LowNoise/Wan2.2-I2V-A14B-LowNoise-${WAN_QUANT}.gguf|unet|9"
   "umt5_xxl|core|Comfy-Org/Wan_2.2_ComfyUI_Repackaged|split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors|text_encoders|5"
   "wan_vae|core|Comfy-Org/Wan_2.2_ComfyUI_Repackaged|split_files/vae/wan_2.1_vae.safetensors|vae|0.3"
-  "wan22_lightning_high|core|lightx2v/Wan2.2-Lightning|*high_noise*4steps*.safetensors|loras|0.8"
-  "wan22_lightning_low|core|lightx2v/Wan2.2-Lightning|*low_noise*4steps*.safetensors|loras|0.8"
-  "seedvr2|core|numz/SeedVR2_comfyUI|*seedvr2*3b*.safetensors|upscale_models|3"
-  # ---------- FULL ----------
-  "ltx23_gguf|full|unsloth/LTX-2.3-GGUF|*Q4_K_S.gguf|unet|12"
+  "wan22_lightning_high|core|Comfy-Org/Wan_2.2_ComfyUI_Repackaged|split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors|loras|0.8"
+  "wan22_lightning_low|core|Comfy-Org/Wan_2.2_ComfyUI_Repackaged|split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors|loras|0.8"
+
+  # ---------- CORE: POST ----------
+  "seedvr2|core|numz/SeedVR2_comfyUI|seedvr2_ema_3b_fp16.safetensors|upscale_models|6"
+
+  # ---------- FULL: LTX 2.3 ----------
+  "ltx23_gguf|full|unsloth/LTX-2.3-GGUF|*${LTX_QUANT}.gguf|unet|12"
   "ltx23_gemma|full|Lightricks/LTX-2.3|*gemma_3_12B_it_fp8_scaled*|text_encoders|12"
   "ltx23_video_vae|full|Lightricks/LTX-2.3|*video*vae*bf16*|vae|3"
   "ltx23_audio_vae|full|Lightricks/LTX-2.3|*audio*vae*bf16*|vae|2"
   "ltx23_upscaler|full|Lightricks/LTX-2.3|*spatial*upscaler*x2*|latent_upscale_models|1"
+
+  # ---------- FULL: AUDIO ----------
   "index_tts_2|full|IndexTeam/IndexTTS-2|*|audio_encoders/index-tts-2|2"
-  # ---------- OPTIONAL ----------
+
+  # ---------- OPTIONAL: HEAVY ----------
   "minimax_h3|optional|Comfy-Org/MiniMax-H3|*|minimax-h3|36"
   "wan22_animate|optional|Wan-AI/Wan2.2-Animate-14B|*|diffusion_models|20"
 )
@@ -73,7 +90,7 @@ download_one() {
   mkdir -p "$out"
 
   echo
-  echo ">>> $id  ($size GB)"
+  echo ">>> $id  (~$size GB)"
   echo "    $repo :: $file"
 
   if $DRY_RUN; then
@@ -91,7 +108,7 @@ download_one() {
   local tmp
   tmp="$(mktemp -d)"
   if ! hf download "$repo" "$file" --local-dir "$tmp"; then
-    echo "    [ERR] tải thất bại: $repo"
+    echo "    [ERR] tải thất bại: $repo :: $file"
     rm -rf "$tmp"
     return 1
   fi

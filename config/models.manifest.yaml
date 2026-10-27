@@ -22,17 +22,17 @@ models:
   - id: qwen_edit_2511_gguf
     station: 2
     tier: core
-    repo: QuantStack/Qwen-Image-Edit-2511-GGUF
-    file: "*Q6_K.gguf"
+    repo: unsloth/Qwen-Image-Edit-2511-GGUF
+    file: "qwen-image-edit-2511-Q6_K.gguf"
     dest: models/unet
     size_gb: 17
     license: Apache-2.0
-    note: "Nếu repo 2511 chưa có, dùng QuantStack/Qwen-Image-Edit-2509-GGUF"
+    note: "T1 24GB: Q6_K. T2 32GB có thể dùng Q8_0."
 
   - id: qwen_25_vl_7b
     station: 2
     tier: core
-    repo: Comfy-Org/HunyuanVideo_1.5_repackaged
+    repo: Comfy-Org/Qwen-Image_ComfyUI
     file: "split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors"
     dest: models/text_encoders
     size_gb: 8
@@ -62,18 +62,19 @@ models:
     station: 3
     tier: core
     repo: QuantStack/Wan2.2-I2V-A14B-GGUF
-    file: "*high-noise*Q5_K_M.gguf"
+    file: "HighNoise/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf"
     dest: models/unet
-    size_gb: 10
+    size_gb: 9
     license: Apache-2.0
+    note: "T1 24GB: Q4_K_M. T2 32GB: Q5_K_M."
 
   - id: wan22_i2v_low
     station: 3
     tier: core
     repo: QuantStack/Wan2.2-I2V-A14B-GGUF
-    file: "*low-noise*Q5_K_M.gguf"
+    file: "LowNoise/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf"
     dest: models/unet
-    size_gb: 10
+    size_gb: 9
     license: Apache-2.0
 
   - id: umt5_xxl
@@ -97,8 +98,8 @@ models:
   - id: wan22_lightning_high
     station: 3
     tier: core
-    repo: lightx2v/Wan2.2-Lightning
-    file: "*high_noise*4steps*.safetensors"
+    repo: Comfy-Org/Wan_2.2_ComfyUI_Repackaged
+    file: "split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"
     dest: models/loras
     size_gb: 0.8
     license: Apache-2.0
@@ -106,8 +107,8 @@ models:
   - id: wan22_lightning_low
     station: 3
     tier: core
-    repo: lightx2v/Wan2.2-Lightning
-    file: "*low_noise*4steps*.safetensors"
+    repo: Comfy-Org/Wan_2.2_ComfyUI_Repackaged
+    file: "split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors"
     dest: models/loras
     size_gb: 0.8
     license: Apache-2.0
@@ -117,11 +118,11 @@ models:
     station: 5
     tier: core
     repo: numz/SeedVR2_comfyUI
-    file: "*seedvr2*3b*.safetensors"
+    file: "seedvr2_ema_3b_fp16.safetensors"
     dest: models/upscale_models
-    size_gb: 3
+    size_gb: 6
     license: Apache-2.0
-    note: "Chọn bản 3B cho 32GB; 7B nếu có 48GB+"
+    note: "Bản 3B cho 24–32GB; 7B nếu có 48GB+"
 
   # ---------- STATION 4: AUDIO ----------
   - id: index_tts_2

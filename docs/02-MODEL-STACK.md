@@ -33,7 +33,10 @@
 
 ---
 
-## Bộ "core" cho Tier 2 (32GB) / disk 80GB (~58GB)
+## Bộ "core" cho Tier 1–2 (24–32GB) / disk 80GB (~55GB)
+
+> T1 (24GB): dùng Wan **Q4_K_M**, Qwen **Q6_K**.
+> T2 (32GB): có thể nâng Wan **Q5_K_M**, Qwen **Q8_0**.
 
 Đây là bộ tối thiểu để chạy **1 shot end-to-end**.
 
@@ -53,11 +56,11 @@
 
 | File | Repo | Dest | Size |
 |---|---|---|---|
-| `*high-noise*Q5_K_M.gguf` | `QuantStack/Wan2.2-I2V-A14B-GGUF` | `models/unet/` | ~10GB |
-| `*low-noise*Q5_K_M.gguf` | `QuantStack/Wan2.2-I2V-A14B-GGUF` | `models/unet/` | ~10GB |
+| `HighNoise/...-Q4_K_M.gguf` (T1) hoặc `Q5_K_M` (T2) | `QuantStack/Wan2.2-I2V-A14B-GGUF` | `models/unet/` | ~9–10GB |
+| `LowNoise/...-Q4_K_M.gguf` (T1) hoặc `Q5_K_M` (T2) | `QuantStack/Wan2.2-I2V-A14B-GGUF` | `models/unet/` | ~9–10GB |
 | `umt5_xxl_fp8_e4m3fn_scaled.safetensors` | `Comfy-Org/Wan_2.2_ComfyUI_Repackaged` | `models/text_encoders/` | ~5GB |
 | `wan_2.1_vae.safetensors` | `Comfy-Org/Wan_2.2_ComfyUI_Repackaged` | `models/vae/` | ~0.3GB |
-| `wan2.2_i2v_lightx2v_4steps_lora_v1_*_noise.safetensors` | `lightx2v/Wan2.2-Lightning` | `models/loras/` | ~1.5GB |
+| `wan2.2_i2v_lightx2v_4steps_lora_v1_*_noise.safetensors` | `Comfy-Org/Wan_2.2_ComfyUI_Repackaged` | `models/loras/` | ~1.5GB |
 
 **Thiết lập:** 4 step Lightning, 480p hoặc 720p, 81 frame.
 **Thời gian:** 480p ~2–4 phút; 720p ~6–10 phút.
