@@ -36,9 +36,10 @@ echo "[3/6] Cài Python deps"
 # shellcheck disable=SC1091
 source "$VENV/bin/activate"
 python -m pip install -q -U pip
-python -m pip install -q -U "huggingface_hub[cli]" hf_transfer imageio-ffmpeg
+# Pin <2.0: transformers 5.x yêu cầu huggingface-hub <2.0
+python -m pip install -q -U "huggingface_hub==1.33.0" imageio-ffmpeg
 export HF_HOME
-export HF_HUB_ENABLE_HF_TRANSFER=1
+export HF_XET_HIGH_PERFORMANCE=1
 mkdir -p "$HF_HOME"
 
 python -c "import huggingface_hub, sys; print('huggingface_hub', huggingface_hub.__version__)"

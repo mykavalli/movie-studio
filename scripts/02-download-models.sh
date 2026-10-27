@@ -13,7 +13,7 @@ set -euo pipefail
 COMFY="${COMFY:-/workspace/ComfyUI}"
 VENV="${VENV:-/venv/main}"
 export HF_HOME="${HF_HOME:-/workspace/.hf_home}"
-export HF_HUB_ENABLE_HF_TRANSFER=1
+export HF_XET_HIGH_PERFORMANCE=1
 
 WAN_QUANT="${WAN_QUANT:-Q4_K_M}"
 QWEN_QUANT="${QWEN_QUANT:-Q6_K}"

@@ -13,6 +13,22 @@
 | R7 | Instance bị thu hồi | SSH mất kết nối | Thấp | Cao | Backup hàng ngày; volume persistent; không lưu only-on-instance |
 | R8 | Chất lượng không đạt kỳ vọng | Shot fail liên tục | Trung bình | Cao | Hạ scope; dùng API cho hero shot; test model trước khi cam kết |
 
+### R9 — SeedVR2 không load: `No module named 'flash_attn'`
+
+**Nguyên nhân:** `xformers` được cài nhưng build thiếu `flash_attn`; diffusers import xformers → lỗi.
+
+**Cách xử lý:** ComfyUI đã chạy với `--disable-xformers`, nên gỡ xformers:
+
+```bash
+source /venv/main/bin/activate
+pip uninstall -y xformers
+supervisorctl restart comfyui
+```
+
+Sau đó SeedVR2 load bình thường. Nếu một node khác cần xformers, cài lại bản tương thích torch.
+
+---
+
 ## 2. Rủi ro quy trình
 
 | # | Rủi ro | Cách xử lý |
