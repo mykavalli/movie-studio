@@ -16,6 +16,10 @@ export HF_HOME="${HF_HOME:-/workspace/.hf_home}"
 export HF_XET_HIGH_PERFORMANCE=1
 # Tải chậm: đặt HF_ENDPOINT=https://hf-mirror.com
 export HF_ENDPOINT="${HF_ENDPOINT:-https://huggingface.co}"
+# Mirror không hỗ trợ Xet → tắt Xet để tránh treo
+if [[ "$HF_ENDPOINT" == *"hf-mirror"* ]]; then
+  export HF_HUB_DISABLE_XET=1
+fi
 
 WAN_QUANT="${WAN_QUANT:-Q4_K_M}"
 QWEN_QUANT="${QWEN_QUANT:-Q6_K}"

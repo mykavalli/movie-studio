@@ -58,7 +58,7 @@ Nếu `hf download` chỉ đạt vài MB/s, thử mirror:
 HF_ENDPOINT=https://hf-mirror.com bash scripts/02-download-models.sh --tier core
 ```
 
-Script đã hỗ trợ biến `HF_ENDPOINT` và `--max-workers 8`.
+Script đã hỗ trợ biến `HF_ENDPOINT`, `--max-workers 8`, và tự tắt Xet khi dùng mirror (mirror không hỗ trợ Xet, dễ treo).
 
 ### Kiểm tra nhanh
 
