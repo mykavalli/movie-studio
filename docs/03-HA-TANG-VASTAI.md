@@ -50,6 +50,16 @@
 /venv/main/bin/activate            ← venv chính
 ```
 
+### Tải model chậm
+
+Nếu `hf download` chỉ đạt vài MB/s, thử mirror:
+
+```bash
+HF_ENDPOINT=https://hf-mirror.com bash scripts/02-download-models.sh --tier core
+```
+
+Script đã hỗ trợ biến `HF_ENDPOINT` và `--max-workers 8`.
+
 ### Kiểm tra nhanh
 
 ```bash

@@ -14,6 +14,8 @@ COMFY="${COMFY:-/workspace/ComfyUI}"
 VENV="${VENV:-/venv/main}"
 export HF_HOME="${HF_HOME:-/workspace/.hf_home}"
 export HF_XET_HIGH_PERFORMANCE=1
+# Tải chậm: đặt HF_ENDPOINT=https://hf-mirror.com
+export HF_ENDPOINT="${HF_ENDPOINT:-https://huggingface.co}"
 
 WAN_QUANT="${WAN_QUANT:-Q4_K_M}"
 QWEN_QUANT="${QWEN_QUANT:-Q6_K}"
@@ -107,7 +109,7 @@ download_one() {
 
   local tmp
   tmp="$(mktemp -d)"
-  if ! hf download "$repo" "$file" --local-dir "$tmp"; then
+  if ! hf download "$repo" "$file" --max-workers 8 --local-dir "$tmp"; then
     echo "    [ERR] tải thất bại: $repo :: $file"
     rm -rf "$tmp"
     return 1
