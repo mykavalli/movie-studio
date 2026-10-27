@@ -8,22 +8,20 @@
 #   WAN_QUANT=Q4_K_M   (T1 24GB) hoặc Q5_K_M (T2 32GB)
 #   QWEN_QUANT=Q6_K    (T1 24GB) hoặc Q8_0 (T2 32GB)
 #   LTX_QUANT=Q4_K_S
+#   ARIA_CONNECTIONS=16
+#   HF_ENDPOINT=https://huggingface.co  (hoặc mirror)
 set -euo pipefail
 
 COMFY="${COMFY:-/workspace/ComfyUI}"
 VENV="${VENV:-/venv/main}"
 export HF_HOME="${HF_HOME:-/workspace/.hf_home}"
 export HF_XET_HIGH_PERFORMANCE=1
-# Tải chậm: đặt HF_ENDPOINT=https://hf-mirror.com
 export HF_ENDPOINT="${HF_ENDPOINT:-https://huggingface.co}"
-# Mirror không hỗ trợ Xet → tắt Xet để tránh treo
-if [[ "$HF_ENDPOINT" == *"hf-mirror"* ]]; then
-  export HF_HUB_DISABLE_XET=1
-fi
 
 WAN_QUANT="${WAN_QUANT:-Q4_K_M}"
 QWEN_QUANT="${QWEN_QUANT:-Q6_K}"
 LTX_QUANT="${LTX_QUANT:-Q4_K_S}"
+ARIA_CONNECTIONS="${ARIA_CONNECTIONS:-16}"
 
 TIER="core"
 DRY_RUN=false
@@ -36,7 +34,7 @@ while [ $# -gt 0 ]; do
     --only) ONLY="$2"; shift 2 ;;
     --list) TIER="list"; shift ;;
     -h|--help)
-      sed -n '2,12p' "$0"; exit 0 ;;
+      sed -n '2,14p' "$0"; exit 0 ;;
     *) echo "Tham số lạ: $1"; exit 1 ;;
   esac
 done
@@ -88,7 +86,24 @@ fi
 source "$VENV/bin/activate"
 command -v hf >/dev/null || { echo "[ERR] thiếu hf CLI. Chạy 00-bootstrap.sh trước."; exit 1; }
 
+HAS_ARIA=false
+command -v aria2c >/dev/null && HAS_ARIA=true
+
 avail_gb() { df --output=avail -BG "$COMFY" | tail -1 | tr -dc '0-9'; }
+
+hf_flatten() {
+  local repo="$1" file="$2" out="$3"
+  local tmp
+  tmp="$(mktemp -d)"
+  if ! hf download "$repo" "$file" --max-workers 8 --local-dir "$tmp"; then
+    rm -rf "$tmp"
+    return 1
+  fi
+  find "$tmp" -type f -print0 | while IFS= read -r -d '' f; do
+    mv -f "$f" "$out/"
+  done
+  rm -rf "$tmp"
+}
 
 download_one() {
   local id="$1" repo="$2" file="$3" dest="$4" size="$5"
@@ -111,20 +126,40 @@ download_one() {
     return 1
   fi
 
-  local tmp
-  tmp="$(mktemp -d)"
-  if ! hf download "$repo" "$file" --max-workers 8 --local-dir "$tmp"; then
-    echo "    [ERR] tải thất bại: $repo :: $file"
-    rm -rf "$tmp"
+  # File có wildcard -> dùng hf CLI
+  if [[ "$file" == *"*"* ]]; then
+    if hf_flatten "$repo" "$file" "$out"; then
+      echo "    -> $out"
+      return 0
+    fi
+    echo "    [ERR] tải thất bại (pattern): $repo"
     return 1
   fi
 
-  # flatten: đưa file về đúng thư mục ComfyUI
-  find "$tmp" -type f -print0 | while IFS= read -r -d '' f; do
-    mv -f "$f" "$out/"
-  done
-  rm -rf "$tmp"
-  echo "    -> $out"
+  local name url
+  name="$(basename "$file")"
+  url="${HF_ENDPOINT}/${repo}/resolve/main/${file}"
+
+  if $HAS_ARIA; then
+    echo "    aria2c ${ARIA_CONNECTIONS} kết nối"
+    if aria2c \
+      -x "$ARIA_CONNECTIONS" -s "$ARIA_CONNECTIONS" -k 5M \
+      -c --file-allocation=none --allow-overwrite=true --auto-file-renaming=false \
+      --console-log-level=warn --summary-interval=30 \
+      -d "$out" -o "$name" "$url"; then
+      echo "    -> $out/$name"
+      return 0
+    fi
+    echo "    [WARN] aria2 lỗi, thử hf CLI..."
+  fi
+
+  if hf_flatten "$repo" "$file" "$out"; then
+    echo "    -> $out"
+    return 0
+  fi
+
+  echo "    [ERR] tải thất bại: $repo :: $file"
+  return 1
 }
 
 case "$TIER" in
